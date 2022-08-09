@@ -1,12 +1,18 @@
-name: drupal9ostraining
+name: drupal9
 recipe: drupal9
 config:
   webroot: d9/web
   # By default the Username, Password, and database name are all the same
-  # as the reciple name, so drupal9, drupal9, drupal9 is
+  # as the recipe name, so drupal9, drupal9, drupal9 is
   # what you will use in your settings.php file
   database: mariadb
+  # latest version of composer
+  composer_version: 2-latest
+  php: '8.1'
 services:
+  memcached:
+    type: memcached
+    mem: 64  
   appserver:
     build_as_root:
       # make sure we are up to date. Also, install vim b/c sometimes
@@ -46,7 +52,7 @@ tooling:
 #
 # https://youtu.be/MGpa1L3XEIY
 #
-# This next series is where the hands on training is. It will take you in depth
+# This next series is hands on. It will take you in depth
 # through every site building concept d9+ has to offer.
 #
 # https://youtu.be/-DYSucV1_9w
@@ -58,5 +64,5 @@ tooling:
 #
 # Note these videos reference d8, but they are so similar you shouldn't
 # have any problems in d9+
-# Also pay close attention to the Acquia and OSTraining channels on youtube
+# Also follow the Acquia and OSTraining channels on youtube
 # They have excellent in dept content for further learning.

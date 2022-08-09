@@ -1,0 +1,4 @@
+==Install steps
+- clone the this repo
+- from the root directory where .lando.yml is located, run:
+  $ lando drupal9-install-new
