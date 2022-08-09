@@ -1,0 +1,62 @@
+name: drupal9ostraining
+recipe: drupal9
+config:
+  webroot: d9/web
+  # By default the Username, Password, and database name are all the same
+  # as the reciple name, so drupal9, drupal9, drupal9 is
+  # what you will use in your settings.php file
+  database: mariadb
+services:
+  appserver:
+    build_as_root:
+      # make sure we are up to date. Also, install vim b/c sometimes
+      # we need to review files inside the docker container that the host
+      # doesn't have access to.
+      - apt-get update -y
+      - apt-get install vim -y
+    build:
+      # install coder sniffer
+      # see: https://www.drupal.org/docs/contributed-modules/code-review-module/installing-coder-sniffer
+      - composer global require drupal/coder
+      - composer global require drupal/coder dealerdirect/phpcodesniffer-composer-installer
+tooling:
+  # If you rebuild or want to reinstall, delete the d9 folder first, else you'll get an error
+  # from composer that the path already exists
+  d9-install-new:
+    service: appserver
+    description: Using composer and drush, install a fresh copy of Drupal 9 at `webroot.`
+    cmd:
+      # see: https://www.drupal.org/docs/develop/using-composer/using-composer-to-install-drupal-and-manage-dependencies
+      - cd /app && composer create-project drupal/recommended-project d9
+      # drush si --db-url=mysql://root:pass@localhost:port/dbname
+      - cd /app/d9 && composer require drush/drush
+      - /app/d9/vendor/bin/drush si --db-url=mysql://drupal9:drupal9@database:3306/drupal9 --account-name=admin --account-pass=admin
+
+
+# Step 0: Download and install Lando if you have not already
+# Step 1: Clone this repo
+# Step 2: Run `lando start` (Should be in the same directory as .lando.yml)
+# Step 3: Run `lando d9-install-new`
+#
+#
+# This repo is for training on d9+. Recommended approach:
+# Watch this 1 hour video series to become familiar with the site building concepts
+# of d9+. You can pause and follow along if you want, but it's really not necessary
+# as the next video series is where the in-depth hands on training is.
+#
+# https://youtu.be/MGpa1L3XEIY
+#
+# This next series is where the hands on training is. It will take you in depth
+# through every site building concept d9+ has to offer.
+#
+# https://youtu.be/-DYSucV1_9w
+#
+# Finally, this series focuses on development where you'll actually build
+# a module from the ground up.
+#
+# https://youtu.be/gs3eQXbxcJk
+#
+# Note these videos reference d8, but they are so similar you shouldn't
+# have any problems in d9+
+# Also pay close attention to the Acquia and OSTraining channels on youtube
+# They have excellent in dept content for further learning.
